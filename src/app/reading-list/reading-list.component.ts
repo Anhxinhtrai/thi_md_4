@@ -21,13 +21,16 @@ export class ReadingListComponent implements OnInit {
   }
 
   ngOnInit(): void {
+   this.resetForm()
+    this.getList()
+  }
+  resetForm(){
     this.setLastId();
     this.formAdd = this.fb.group({
       id: [this.lastId],
       name: [],
       read: [false]
     })
-    this.getList()
   }
   setLastId(){
     let lastIndex = this.bookService.getAll().length -1
@@ -51,13 +54,7 @@ export class ReadingListComponent implements OnInit {
     alert("thêm thành công")
     this.books = [];
     this.getList()
-    console.log(this.books)
-    this.setLastId();
-    this.formAdd = this.fb.group({
-      id: [this.lastId],
-      name: [],
-      read: [false]
-    })
+    this.resetForm()
   }
 
   read(index:number) {
