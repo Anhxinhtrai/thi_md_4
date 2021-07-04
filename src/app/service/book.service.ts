@@ -6,6 +6,8 @@ import {Book} from "../book";
 })
 export class BookService {
 
+  list : Book[] = [];
+  history: Book[] = [];
   books: Book[] = [
     {
       id: 0,
@@ -52,6 +54,19 @@ export class BookService {
     for (let i = 0; i < this.books.length; i++) {
       if (id==i){
         this.books[i].read = true;
+      }
+    }
+  }
+  fillter(){
+  let books = this.books;
+  this.list = [];
+  this.history = [];
+    for (let i = 0; i < books.length; i++) {
+      if (books[i].read === true){
+        this.history.push(books[i])
+      }
+      if (books[i].read === false){
+        this.list.push(books[i])
       }
     }
   }

@@ -13,6 +13,7 @@ export class ReadingListComponent implements OnInit {
 
   books: Book[] = []
   formAdd: FormGroup | undefined
+  lastId : number| undefined
 
   constructor(private bookService: BookService,
               private fb: FormBuilder,
@@ -20,21 +21,25 @@ export class ReadingListComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    let lastId = this.bookService.getAll().length
+    this.setLastId();
     this.formAdd = this.fb.group({
-      id: [lastId],
+      id: [this.lastId],
       name: [],
       read: [false]
     })
     this.getList()
   }
+  setLastId(){
+    let lastIndex = this.bookService.getAll().length -1
+    // @ts-ignore
+    this.lastId = this.bookService.getAll()[lastIndex].id +1
+  }
 
   getList() {
-    let books = this.bookService.getAll()
+    this.bookService.fillter()
+    let books = this.bookService.list
     for (let i = 0; i < books.length; i++) {
-      if (books[i].read === false) {
-        this.books.push(books[i])
-      }
+      this.books.push(books[i])
     }
     return
   }
@@ -44,8 +49,15 @@ export class ReadingListComponent implements OnInit {
     console.log(book)
     this.bookService.addBook(book)
     alert("thêm thành công")
-    this.books = []
+    this.books = [];
     this.getList()
+    console.log(this.books)
+    this.setLastId();
+    this.formAdd = this.fb.group({
+      id: [this.lastId],
+      name: [],
+      read: [false]
+    })
   }
 
   read(index:number) {
@@ -56,6 +68,8 @@ export class ReadingListComponent implements OnInit {
     alert("đã đọc quyển sách "+ this.bookService.getAll()[id].name)
     this.books = []
     this.getList()
+    console.log(this.books)
+
   }
 
 
